@@ -1,0 +1,7 @@
+{
+  "name": "MXN Modern Herbal Assistant",
+  "description": "An interactive Bengali language assistant for Modern Herbal Group product analysis, pricing, and health consultations based on the company catalog.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
