@@ -12,8 +12,10 @@ const App: React.FC = () => {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    // Simulate initial data loading to prevent blank screen flash
-    const timer = setTimeout(() => setIsInitializing(false), 800);
+    // Artificial delay to ensure all assets are ready and show branding
+    const timer = setTimeout(() => {
+      setIsInitializing(false);
+    }, 1200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -28,35 +30,42 @@ const App: React.FC = () => {
 
   if (isInitializing) {
     return (
-      <div className="min-h-screen bg-[#f0f7f4] flex flex-col items-center justify-center">
-        <div className="relative">
-          <div className="w-24 h-24 border-4 border-green-200 border-t-green-700 rounded-full animate-spin"></div>
+      <div className="fixed inset-0 bg-[#0a2e1f] flex flex-col items-center justify-center z-[9999]">
+        <div className="relative mb-8">
+          <div className="w-24 h-24 border-4 border-green-800 border-t-emerald-400 rounded-full animate-spin"></div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg className="w-10 h-10 text-green-800" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-10 h-10 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
             </svg>
           </div>
         </div>
-        <h2 className="mt-6 text-green-900 font-bold text-lg animate-pulse">মডার্ণ ক্যাটালগ লোড হচ্ছে...</h2>
-        <p className="text-green-600 text-sm mt-2">প্রকৃতির সাথে থাকুন, আজীবন সুস্থ থাকুন।</p>
+        <div className="text-center">
+          <h1 className="text-white text-3xl font-black tracking-tighter mb-2">MXN MODERN HERBAL</h1>
+          <p className="text-emerald-400 text-sm font-bold tracking-widest animate-pulse">ডিজিটাল ক্যাটালগ লোড হচ্ছে...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8faf9] selection:bg-green-100 selection:text-green-900">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
       <Header />
       
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Main Content: Product Catalog */}
-          <div className="lg:col-span-8 space-y-8 order-2 lg:order-1">
-            <section className="bg-white p-4 sm:p-8 rounded-[2rem] shadow-xl shadow-green-900/5 border border-white">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+          <div className="lg:col-span-8 space-y-6 order-2 lg:order-1">
+            <div className="bg-white p-6 md:p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
-                  <h2 className="text-2xl font-black text-slate-800 tracking-tight">পণ্য তালিকা</h2>
-                  <p className="text-sm text-slate-500 mt-1 font-medium">আপনার পছন্দের পণ্যটি খুঁজুন</p>
+                  <h2 className="text-3xl font-black text-slate-800 tracking-tight flex items-center">
+                    পণ্য তালিকা
+                    <span className="ml-3 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full border border-emerald-100">
+                      {filteredProducts.length}টি পণ্য
+                    </span>
+                  </h2>
+                  <p className="text-slate-500 mt-2 font-medium">প্রকৃতি থেকে সংগৃহীত শুদ্ধ হারবাল পণ্যসমূহ</p>
                 </div>
                 
                 <div className="relative group w-full md:w-80">
@@ -64,23 +73,23 @@ const App: React.FC = () => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="নাম বা সমস্যা লিখে খুঁজুন..."
-                    className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-green-600 focus:bg-white outline-none transition-all group-hover:border-slate-300"
+                    placeholder="নাম বা উপকারিতা লিখে খুঁজুন..."
+                    className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all"
                   />
-                  <svg className="w-6 h-6 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-green-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-emerald-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
               </div>
 
               {/* Category Filter Pills */}
-              <div className="flex flex-wrap gap-2.5 mb-10 overflow-x-auto pb-2 scrollbar-hide">
+              <div className="flex gap-2 mb-12 overflow-x-auto pb-4 scrollbar-hide -mx-2 px-2">
                 <button
                   onClick={() => setSelectedCategory('All')}
-                  className={`px-6 py-3 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-300 ${
+                  className={`px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-300 ${
                     selectedCategory === 'All' 
-                      ? 'bg-green-800 text-white shadow-lg shadow-green-900/20' 
-                      : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
+                      ? 'bg-emerald-800 text-white shadow-lg shadow-emerald-900/20' 
+                      : 'bg-white text-slate-500 border border-slate-200 hover:border-emerald-200 hover:text-emerald-700'
                   }`}
                 >
                   সব পণ্য
@@ -89,10 +98,10 @@ const App: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-6 py-3 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-300 ${
+                    className={`px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-300 ${
                       selectedCategory === cat 
-                        ? 'bg-green-800 text-white shadow-lg shadow-green-900/20' 
-                        : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
+                        ? 'bg-emerald-800 text-white shadow-lg shadow-emerald-900/20' 
+                        : 'bg-white text-slate-500 border border-slate-200 hover:border-emerald-200 hover:text-emerald-700'
                     }`}
                   >
                     {cat}
@@ -102,63 +111,60 @@ const App: React.FC = () => {
 
               {/* Products Grid */}
               {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredProducts.map(p => (
                     <ProductCard key={p.id} product={p} />
                   ))}
                 </div>
               ) : (
-                <div className="py-24 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-                  <div className="bg-white w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 shadow-sm">
-                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="py-32 text-center bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
+                  <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 shadow-inner">
+                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-slate-800">দুঃখিত, কোনো পণ্য পাওয়া যায়নি!</h3>
-                  <p className="text-slate-500 mt-2 max-w-xs mx-auto">আপনার সার্চ কুয়েরি পরিবর্তন করে অথবা অন্য ক্যাটাগরি সিলেক্ট করে চেষ্টা করুন।</p>
+                  <p className="text-slate-500 mt-2">অন্য কোনো নাম বা ক্যাটাগরি দিয়ে চেষ্টা করুন।</p>
                 </div>
               )}
-            </section>
+            </div>
           </div>
 
           {/* Sidebar: Chat Assistant */}
           <div className="lg:col-span-4 order-1 lg:order-2">
-            <div className="sticky top-28 space-y-6">
+            <div className="lg:sticky lg:top-24 space-y-6">
               <ChatInterface />
               
-              <div className="p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-[2rem] border border-orange-100 shadow-sm relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
-                  <svg className="w-16 h-16 text-orange-900" fill="currentColor" viewBox="0 0 20 20">
+              <div className="p-8 bg-gradient-to-br from-emerald-900 to-green-950 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-10">
+                  <svg className="w-20 h-20" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <h4 className="text-[11px] font-black text-orange-800 uppercase tracking-widest mb-4 flex items-center">
-                  <span className="w-5 h-[1px] bg-orange-300 mr-2"></span>
-                  দ্রুত একশন
-                </h4>
-                <ul className="space-y-3">
+                <h4 className="text-emerald-400 text-[11px] font-black uppercase tracking-[0.2em] mb-4">দ্রুত খুঁজে নিন</h4>
+                <div className="space-y-3 relative z-10">
                   {[
-                    { text: 'উচ্চ রক্তচাপের পণ্য', query: 'রক্তচাপ' },
                     { text: 'হজম সমস্যার সমাধান', query: 'হজম' },
-                    { text: 'চুল পড়া রোধের উপায়', query: 'চুল পড়া' },
-                    { text: 'ওজন কমানোর ওষুধ', query: 'ওজন' }
+                    { text: 'চুল পড়া রোধের শ্যাম্পু', query: 'শ্যাম্পু' },
+                    { text: 'ডায়াবেটিস নিয়ন্ত্রণ', query: 'করলা' },
+                    { text: 'স্মৃতিশক্তি বৃদ্ধির ওষুধ', query: 'স্মৃতি' }
                   ].map((item, idx) => (
-                    <li 
+                    <button 
                       key={idx}
-                      className="group flex items-center text-[13px] font-bold text-slate-700 cursor-pointer hover:text-green-800 transition-colors"
                       onClick={() => {
                         setSearchQuery(item.query);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
+                      className="w-full text-left group flex items-center text-sm font-semibold hover:text-emerald-400 transition-colors py-1"
                     >
-                      <span className="w-1.5 h-1.5 bg-orange-400 rounded-full mr-3 group-hover:scale-150 transition-transform"></span>
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full mr-3 group-hover:scale-150 transition-all"></span>
                       {item.text}
-                      <svg className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <svg className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
-                    </li>
+                    </button>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -166,15 +172,20 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <footer className="bg-white border-t border-slate-100 py-16 mt-20">
+      <footer className="bg-white border-t border-slate-200 py-16 mt-20">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex justify-center items-center space-x-2 mb-6">
-            <div className="w-8 h-[1px] bg-slate-200"></div>
-            <div className="w-2 h-2 bg-green-700 rotate-45"></div>
-            <div className="w-8 h-[1px] bg-slate-200"></div>
+          <div className="flex justify-center items-center space-x-3 mb-8">
+            <div className="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-800">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-black text-slate-800 tracking-tighter">MXN MODERN HERBAL</h3>
           </div>
-          <p className="text-slate-800 font-bold text-sm mb-2">মডার্ণ হারবাল গ্রুপ - ২০২৫</p>
-          <p className="text-slate-400 text-xs max-w-md mx-auto leading-relaxed">এই প্ল্যাটফর্মটি কেবলমাত্র তথ্যমূলক উদ্দেশ্যে তৈরি। যেকোনো স্বাস্থ্য বিষয়ক সিদ্ধান্ত গ্রহণের আগে অবশ্যই রেজিস্টার্ড চিকিৎসকের পরামর্শ নিন।</p>
+          <p className="text-slate-500 text-sm font-medium mb-2">সাফল্য ও সেবার ৪৪ বৎসর - ২০২৫</p>
+          <p className="text-slate-400 text-xs max-w-lg mx-auto leading-relaxed px-4">
+            এটি একটি আধুনিক ডিজিটাল ক্যাটালগ এবং পরামর্শক। কোনো ওষুধের ব্যবহারের আগে অবশ্যই অভিজ্ঞ চিকিৎসকের পরামর্শ নিন। প্রাকৃতিক চিকিৎসা দীর্ঘমেয়াদী সুফল বয়ে আনে।
+          </p>
         </div>
       </footer>
     </div>
