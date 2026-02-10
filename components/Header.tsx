@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { BUSINESS_INFO } from '../constants';
 
 const Header: React.FC = () => {
   return (
@@ -22,9 +23,15 @@ const Header: React.FC = () => {
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse mr-2"></div>
             <span className="text-xs font-semibold">Official 2025 Digital Catalog</span>
           </div>
-          <button className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-lg transition-all active:scale-95">
-            সদস্য হোন
-          </button>
+          <a 
+            href={`tel:${BUSINESS_INFO.contact.phone}`}
+            className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-lg transition-all active:scale-95 flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 004.87 4.87l.774-1.548a1 1 0 011.06-.539l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+            </svg>
+            কল দিন
+          </a>
         </div>
       </div>
     </header>
