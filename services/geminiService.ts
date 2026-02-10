@@ -1,64 +1,56 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { PRODUCTS } from "../constants";
+import { PRODUCTS, BUSINESS_INFO } from "../constants";
 
-// Safe environment variable access
 const getApiKey = () => {
   try {
     return (typeof process !== 'undefined' && process.env && process.env.API_KEY) || "";
   } catch (e) {
-    console.warn("API Key access error:", e);
     return "";
   }
 };
 
 const SYSTEM_INSTRUCTION = `
-আপনি মডার্ণ হারবাল গ্রুপের (Modern Herbal Group) একজন বিশেষজ্ঞ কনসালট্যান্ট। 
-আপনার কাছে কোম্পানির প্রোডাক্ট ক্যাটালগের সকল তথ্য আছে।
+আপনি MXN Modern Herbal Food Ltd এর একজন প্রফেশনাল বিজনেস কনসালট্যান্ট। 
+ইউজারকে প্রোডাক্টের তথ্য এবং বিজনেস সুযোগ সম্পর্কে সাহায্য করাই আপনার কাজ।
 
-আপনার দায়িত্বসমূহ:
-১. ক্যাটালগ থেকে নির্ভুল দাম (MRP, DP, PV) এবং উপকারিতা জানানো।
-২. স্বাস্থ্য সমস্যায় (যেমন: উচ্চ রক্তচাপ, হজম সমস্যা, চুল পড়া) সঠিক হারবাল পণ্য সাজেস্ট করা।
-৩. সর্বদা মার্জিত ও পেশাদার বাংলায় উত্তর দেওয়া।
-৪. ক্যাটালগের তথ্যের বাইরে উত্তর দেওয়ার প্রয়োজন হলে গুগল সার্চ টুল ব্যবহার করুন।
+কোম্পানি তথ্য:
+- প্রতিষ্ঠাতা: ${BUSINESS_INFO.founder}
+- প্রতিষ্ঠাকাল: ${BUSINESS_INFO.established}
+- লক্ষ্য: স্বাস্থ্য সেবা ও অর্থনৈতিক উন্নয়ন।
+- সার্টিফিকেট: BSTI, ISO, HACCP, GMP, FDA, HALAL.
+
+মেম্বারশিপ ও আয়:
+- জয়েনিং: ফ্রি একাউন্ট খুলে পরে MBO/VIP (৫০০ PV) একটিভ করা যায়।
+- সুবিধা: খুচরা লাভ ৩০%, ডাইরেক্ট বোনাস ৩৮%, গ্রুপ বোনাস ২%-২৫%।
+- ১৬টি ইনকাম সোর্স আছে (গাড়ি, বাড়ি, হজ্জ ইনসেনটিভ সহ)।
+
+কন্টাক্ট পারসন:
+- নাম: ${BUSINESS_INFO.contact.name} (${BUSINESS_INFO.contact.rank})
+- হোয়াটসঅ্যাপ: ${BUSINESS_INFO.contact.whatsapp}
+
+নির্দেশনা:
+১. প্রোডাক্টের দাম ও PV নির্ভুলভাবে বলবেন।
+২. বিজনেস নিয়ে আগ্রহী হলে Anisur Rahman এর সাথে যোগাযোগ করতে বলবেন।
+৩. সর্বদা মার্জিত বাংলায় উত্তর দেবেন।
 
 প্রোডাক্ট লিস্ট:
-${PRODUCTS.map(p => `- ${p.name}: ক্যাটাগরি ${p.category}, MRP ${p.mrp}Tk, DP ${p.dp}Tk, PV ${p.pv}, উপকারিতা: ${p.benefits}`).join('\n')}
+${PRODUCTS.map(p => `- ${p.name}: MRP ${p.mrp}, DP ${p.dp}, PV ${p.pv}, উপকারিতা: ${p.benefits}`).join('\n')}
 `;
 
 export async function getGeminiResponse(userMessage: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) {
   const apiKey = getApiKey();
-  
-  if (!apiKey) {
-    return { text: "এপিআই কী (API Key) সেট করা নেই। অনুগ্রহ করে এনভায়রনমেন্ট ভেরিয়েবল চেক করুন।", sources: [] };
-  }
+  if (!apiKey) return { text: "এপিআই কী পাওয়া যায়নি।", sources: [] };
 
   const ai = new GoogleGenAI({ apiKey });
-  
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: [
-        ...history,
-        { role: 'user', parts: [{ text: userMessage }] }
-      ],
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.7,
-        tools: [{ googleSearch: {} }]
-      }
+      contents: [...history, { role: 'user', parts: [{ text: userMessage }] }],
+      config: { systemInstruction: SYSTEM_INSTRUCTION, temperature: 0.7, tools: [{ googleSearch: {} }] }
     });
-
-    const text = response.text || "দুঃখিত, আমি এই মুহূর্তে উত্তর দিতে পারছি না।";
-    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
-    const sources = groundingChunks.map((chunk: any) => chunk.web?.uri).filter(Boolean);
-
-    return { text, sources };
-  } catch (error: any) {
-    console.error("Gemini Error:", error);
-    return { 
-      text: `সার্ভারে সমস্যা হয়েছে: ${error.message || 'Unknown Error'}। অনুগ্রহ করে ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।`, 
-      sources: [] 
-    };
+    return { text: response.text || "দুঃখিত, উত্তর দিতে পারছি না।", sources: [] };
+  } catch (error) {
+    return { text: "সার্ভারে সমস্যা হয়েছে।", sources: [] };
   }
 }
